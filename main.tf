@@ -27,7 +27,7 @@ data "oci_core_vcn" "vcn" {
 resource "oci_core_subnet" "subnet" {
   compartment_id = local.vcn.compartment_id
   vcn_id = local.vcn.id
-  prohibit_public_ip_on_vnic = local.public
+  prohibit_public_ip_on_vnic = !local.public
 
   cidr_block = local.cidr
   display_name = local.name
