@@ -1,3 +1,13 @@
+locals {
+  protocol_map = {
+    all = "all",
+    tcp = 6,
+    udp = 17,
+    icmp = 1,
+    icmp6 = 58
+  }
+}
+
 resource "oci_core_security_list" "ingress" {
   compartment_id = local.vcn.compartment_id
   vcn_id = local.vcn.id
