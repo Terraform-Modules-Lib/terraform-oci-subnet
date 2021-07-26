@@ -15,7 +15,7 @@ resource "oci_core_security_list" "ingress" {
       protocol = local.protocol_map[ingress_security_rules.value.protocol]
       
       dynamic "tcp_options" {
-        for_each = ingress_security_rules.value.protocol = "tcp" ? {ingress_security_rules.key = ingress_security_rules.value } : {}
+        for_each = ingress_security_rules.value.protocol == "tcp" ? { ingress_security_rules.key = ingress_security_rules.value } : {}
         
         content {
           min = tcp_options.value.dst_port_min
@@ -28,7 +28,7 @@ resource "oci_core_security_list" "ingress" {
       }
       
       dynamic "udp_options" {
-        for_each = ingress_security_rules.value.protocol = "udp" ? {ingress_security_rules.key = ingress_security_rules.value } : {}
+        for_each = ingress_security_rules.value.protocol == "udp" ? {ingress_security_rules.key = ingress_security_rules.value } : {}
         
         content {
           min = udp_options.value.dst_min
@@ -41,7 +41,7 @@ resource "oci_core_security_list" "ingress" {
       }
       
       dynamic "icmp_options" {
-        for_each = ingress_security_rules.value.protocol = "icmp" ? {ingress_security_rules.key = ingress_security_rules.value } : {}
+        for_each = ingress_security_rules.value.protocol == "icmp" ? {ingress_security_rules.key = ingress_security_rules.value } : {}
         
         content {
           type = icmp_options.value.type
