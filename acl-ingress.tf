@@ -1,5 +1,3 @@
-
-
 resource "oci_core_security_list" "ingress" {
   compartment_id = local.vcn.compartment_id
   vcn_id = local.vcn.id
@@ -18,11 +16,11 @@ resource "oci_core_security_list" "ingress" {
         for_each = ingress_security_rules.value.protocol == "tcp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
         
         content {
-          min = tcp_options.value.dst_port_min
-          max = tcp_options.value.dst_port_max
+          min = try(tcp_options.value.dst_port_min, tcp_options.value.dst_port_max, tcp_options.value.dst_port, 0)
+          max = try(tcp_options.value.dst_port_max, tcp_options.value.dst_port_min, tcp_options.value.dst_port, 65535)
           source_port_range {
-            min = tcp_options.value.src_port_min
-            max = tcp_options.value.src_port_max
+            min = try(tcp_options.value.src_port_min, tcp_options.value.src_port_max, tcp_options.value.src_port, 0)
+            max = try(tcp_options.value.src_port_max, tcp_options.value.src_port_min, tcp_options.value.src_port, 65535)
           }
         }
       }
