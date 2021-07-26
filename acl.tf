@@ -8,7 +8,7 @@ locals {
   }
 }
 
-resource "oci_core_security_list" "ingress" {
+resource "oci_core_security_list" "acl" {
   compartment_id = local.vcn.compartment_id
   vcn_id = local.vcn.id
   
