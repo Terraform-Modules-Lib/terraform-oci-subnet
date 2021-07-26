@@ -16,10 +16,10 @@ resource "oci_core_security_list" "ingress" {
         for_each = ingress_security_rules.value.protocol == "tcp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
         
         content {
-          min = try(tcp_options.value.dst_port_min, tcp_options.value.dst_port_max, tcp_options.value.dst_port, 0)
+          min = try(tcp_options.value.dst_port_min, tcp_options.value.dst_port_max, tcp_options.value.dst_port, 1)
           max = try(tcp_options.value.dst_port_max, tcp_options.value.dst_port_min, tcp_options.value.dst_port, 65535)
           source_port_range {
-            min = try(tcp_options.value.src_port_min, tcp_options.value.src_port_max, tcp_options.value.src_port, 0)
+            min = try(tcp_options.value.src_port_min, tcp_options.value.src_port_max, tcp_options.value.src_port, 1)
             max = try(tcp_options.value.src_port_max, tcp_options.value.src_port_min, tcp_options.value.src_port, 65535)
           }
         }
@@ -29,11 +29,11 @@ resource "oci_core_security_list" "ingress" {
         for_each = ingress_security_rules.value.protocol == "udp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
         
         content {
-          min = udp_options.value.dst_port_min
-          max = udp_options.value.dst_port_max
+          min = try(udp_options.value.dst_port_min, udp_options.value.dst_port_max, udp_options.value.dst_port, 1)
+          max = try(udp_options.value.dst_port_max, udp_options.value.dst_port_min, udp_options.value.dst_port, 65535)
           source_port_range {
-            min = udp_options.value.src_port_min
-            max = udp_options.value.src_port_max
+            min = try(udp_options.value.src_port_min, udp_options.value.src_port_max, udp_options.value.src_port, 1)
+            max = try(udp_options.value.src_port_max, udp_options.value.src_port_min, udp_options.value.src_port, 65535)
           }
         }
       }
