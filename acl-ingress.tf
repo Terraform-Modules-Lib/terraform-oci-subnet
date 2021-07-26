@@ -18,11 +18,11 @@ resource "oci_core_security_list" "ingress" {
         for_each = ingress_security_rules.value.protocol = "tcp" ? {ingress_security_rules.key = ingress_security_rules.value } : {}
         
         content {
-          min = tcp_options.value.dst_min
-          max = tcp_options.value.dst_max
+          min = tcp_options.value.dst_port_min
+          max = tcp_options.value.dst_port_max
           source_port_range {
-            min = tcp_options.value.src_min
-            max = tcp_options.value.src_max
+            min = tcp_options.value.src_port_min
+            max = tcp_options.value.src_port_max
           }
         }
       }
