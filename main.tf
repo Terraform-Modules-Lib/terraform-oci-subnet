@@ -19,6 +19,14 @@ locals {
   
   vcn = data.oci_core_vcn.vcn
   subnet = oci_core_subnet.subnet
+  
+  protocol_map = {
+    all = "all",
+    tcp = 6,
+    udp = 17,
+    icmp = 1,
+    icmp6 = 58
+  }
 }
 
 data "oci_core_vcn" "vcn" {
