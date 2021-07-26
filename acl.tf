@@ -20,10 +20,10 @@ resource "oci_core_security_list" "ingress" {
     content {
       description = ingress_security_rules.value.description
       source = ingress_security_rules.value.source
-      protocol = local.protocol_map[ingress_security_rules.value.protocol]
+      protocol = local.protocol_map[try(ingress_security_rules.value.protocol, "all")]
       
       dynamic "tcp_options" {
-        for_each = ingress_security_rules.value.protocol == "tcp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
+        for_each = try(ingress_security_rules.value.protocol, "all") == "tcp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
         
         content {
           min = try(tcp_options.value.dst_port_min, tcp_options.value.dst_port_max, tcp_options.value.dst_port, 1)
@@ -36,7 +36,7 @@ resource "oci_core_security_list" "ingress" {
       }
       
       dynamic "udp_options" {
-        for_each = ingress_security_rules.value.protocol == "udp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
+        for_each = try(ingress_security_rules.value.protocol, "all") == "udp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
         
         content {
           min = try(udp_options.value.dst_port_min, udp_options.value.dst_port_max, udp_options.value.dst_port, 1)
@@ -49,7 +49,7 @@ resource "oci_core_security_list" "ingress" {
       }
       
       dynamic "icmp_options" {
-        for_each = ingress_security_rules.value.protocol == "icmp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
+        for_each = try(ingress_security_rules.value.protocol, "all") == "icmp" ? zipmap([ingress_security_rules.key], [ingress_security_rules.value]) : {}
         
         content {
           type = icmp_options.value.type
@@ -65,10 +65,10 @@ resource "oci_core_security_list" "ingress" {
     content {
       description = egress_security_rules.value.description
       destination = egress_security_rules.value.destination
-      protocol = local.protocol_map[egress_security_rules.value.protocol]
+      protocol = local.protocol_map[try(egress_security_rules.value.protocol, "all")]
       
       dynamic "tcp_options" {
-        for_each = egress_security_rules.value.protocol == "tcp" ? zipmap([egress_security_rules.key], [egress_security_rules.value]) : {}
+        for_each = try(egress_security_rules.value.protocol, "all") == "tcp" ? zipmap([egress_security_rules.key], [egress_security_rules.value]) : {}
         
         content {
           min = try(tcp_options.value.dst_port_min, tcp_options.value.dst_port_max, tcp_options.value.dst_port, 1)
@@ -81,7 +81,7 @@ resource "oci_core_security_list" "ingress" {
       }
       
       dynamic "udp_options" {
-        for_each = egress_security_rules.value.protocol == "udp" ? zipmap([egress_security_rules.key], [egress_security_rules.value]) : {}
+        for_each = try(egress_security_rules.value.protocol, "all") == "udp" ? zipmap([egress_security_rules.key], [egress_security_rules.value]) : {}
         
         content {
           min = try(udp_options.value.dst_port_min, udp_options.value.dst_port_max, udp_options.value.dst_port, 1)
@@ -94,7 +94,7 @@ resource "oci_core_security_list" "ingress" {
       }
       
       dynamic "icmp_options" {
-        for_each = egress_security_rules.value.protocol == "icmp" ? zipmap([egress_security_rules.key], [egress_security_rules.value]) : {}
+        for_each = try(egress_security_rules.value.protocol, "all") == "icmp" ? zipmap([egress_security_rules.key], [egress_security_rules.value]) : {}
         
         content {
           type = icmp_options.value.type
