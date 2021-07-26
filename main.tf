@@ -33,4 +33,6 @@ resource "oci_core_subnet" "subnet" {
   cidr_block = local.cidr
   display_name = local.name
   dns_label = local.name
+  
+  security_list_ids = [oci_core_security_list.acl.id]
 }
