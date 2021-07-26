@@ -15,6 +15,7 @@ locals {
   cidr = var.cidr
   name = var.name
   public = var.public
+  acl = var.acl
   
   vcn = data.oci_core_vcn.vcn
   subnet = oci_core_subnet.subnet
