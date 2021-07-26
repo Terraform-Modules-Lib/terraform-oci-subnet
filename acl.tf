@@ -15,7 +15,7 @@ resource "oci_core_security_list" "acl" {
   display_name = local.name
   
   dynamic "ingress_security_rules" {
-    for_each = local.acl.ingress
+    for_each = try(local.acl.ingress, {})
     
     content {
       description = ingress_security_rules.value.description
@@ -60,7 +60,7 @@ resource "oci_core_security_list" "acl" {
   }
   
   dynamic "egress_security_rules" {
-    for_each = local.acl.egress
+    for_each = try(local.acl.egress, {})
     
     content {
       description = egress_security_rules.value.description
